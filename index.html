@@ -35,7 +35,64 @@
 </section>
 
 
+<script>
+    var hasEMESupport = function () {
+      var eme = "MediaKeys" in window || "WebKitMediaKeys" in window || "MSMediaKeys" in window;
+      if (eme) {
+        return true;
+      }
+      return false;
+    };
 
+    console.log(hasEMESupport());
+
+    var hasRMKSASupport = function () {
+      var requestMediaKeySystemAccess = "requestMediaKeySystemAccess" in window.navigator;
+      if (requestMediaKeySystemAccess) {
+        return true;
+      }
+      return false;
+    };
+
+    console.log(hasRMKSASupport());
+
+    var config = [{
+      "initDataTypes": ["cenc"],
+      "audioCapabilities": [{ "contentType": 'audio/mp4;codecs="mp4a.40.2"', robustness: 'SW_SECURE_CRYPTO' }],
+      "videoCapabilities": [{ "contentType": 'video/mp4;codecs="avc1.42E01E"', robustness: 'SW_SECURE_CRYPTO' }]
+    }];
+    try {
+      navigator.
+        requestMediaKeySystemAccess("com.widevine.alpha", config).
+        then(function (mediaKeySystemAccess) {
+          console.log('widevine support ok');
+        }).catch(function (e) {
+          console.log('no1 widevine support');
+          console.log(e.name);
+          console.log(e.message);
+          console.log(e.code);
+          console.log(e.code);
+          console.log(e.__proto__);
+          console.log(e);
+        });
+    } catch (e) {
+      console.log('no2 widevine support');
+      console.log(e);
+    }
+    try {
+      navigator.
+        requestMediaKeySystemAccess("org.w3.clearkey", config).
+        then(function (mediaKeySystemAccess) {
+          console.log('clearkey support ok');
+        }).catch(function (e) {
+          console.log('no1 clearkey support');
+          console.log(e);
+        });
+    } catch (e) {
+      console.log('no2 clearkey support');
+      console.log(e);
+    }
+  </script>
 
 
 
